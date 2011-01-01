@@ -11,6 +11,7 @@ author: Ryan Florence
 
 requires:
   - Core/Element
+  - Core/JSON
 
 provides: [Element.Behaviors]
 
@@ -22,7 +23,7 @@ Element.behaviors.filterNow = function(){
 		element.get('data-filter').split(/ +|\t+|\n+/).each(function(raw){
 			var split = raw.split(':'),
 			    filter = split[0],
-			    options = JSON.parse((element.get('data-' + (split[1] || filter))) || '{}');
+			    options = JSON.decode((element.get('data-' + (split[1] || filter))) || '{}');
 			if (raw == '' || element.retrieve('behavior-' + raw)) return;
 			if (!Element.behaviors[filter]) throw new Error('Filter `' + filter + '` is undefined');
 			element.store('behavior-' + raw, Element.behaviors[filter].apply(element, [options]) || true);
