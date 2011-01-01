@@ -34,9 +34,10 @@ var lookup = Element.lookupBehavior = function(behavior){
 }
 Element.lookupBehaviors = lookup.overloadGetter();
 
-Element.filterBehaviors = function(){
-	$$('[data-filter]').each(function(element){
-		element.get('data-filter').split(/ +|\t+|\n+/).each(function(raw){
+Element.filterBehaviors = function(attribute){
+	if (!attribute) attribute = 'data-filter';
+	$$('[' + attribute + ']').each(function(element){
+		element.get(attribute).split(/ +|\t+|\n+/).each(function(raw){
 			var split = raw.split(':'),
 			    filter = split[0],
 			    options = JSON.decode((element.get('data-' + (split[1] || filter))) || '{}');
