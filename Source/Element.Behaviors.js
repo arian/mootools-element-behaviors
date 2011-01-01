@@ -18,16 +18,34 @@ provides: [Element.Behaviors]
 ...
 */
 
-Element.behaviors = {};
-Element.behaviors.filterNow = function(){
+
+(function(){
+
+var behaviors = {};
+
+var define = Element.defineBehavior = function(behavior, fn){
+	behaviors[behavior] = fn;
+	return this;
+};
+Element.defineBehaviors = define.overloadSetter();
+
+var lookup = Element.lookupBehavior = function(behavior){
+	return behaviors[behavior];
+}
+Element.lookupBehaviors = lookup.overloadGetter();
+
+Element.filterBehaviors = function(){
 	$$('[data-filter]').each(function(element){
 		element.get('data-filter').split(/ +|\t+|\n+/).each(function(raw){
 			var split = raw.split(':'),
 			    filter = split[0],
 			    options = JSON.decode((element.get('data-' + (split[1] || filter))) || '{}');
 			if (raw == '' || element.retrieve('behavior-' + raw)) return;
-			if (!Element.behaviors[filter]) throw new Error('Filter `' + filter + '` is undefined');
-			element.store('behavior-' + raw, Element.behaviors[filter].call(element, options) || true);
+			var behavior = behaviors[filter]
+			if (!behavior) throw new Error('Filter `' + filter + '` is undefined');
+			element.store('behavior-' + raw, behavior.call(element, options) || true);
 		});
 	});
 };
+
+})();

@@ -10,8 +10,8 @@
 }
 </style>
 
-<div 
-	id=fixture 
+<div
+	id=fixture
 	data-filter="pulse pulse:pulse-two gray"
 	data-pulse='{"duration":2000,"property":"opacity","from":0,"to":1}'
 	data-pulse-two='{"duration":415,"property":"color","from":"#f00","to":"#32c"}'>
@@ -22,16 +22,16 @@
 
 <script>
 
-Object.append(Element.behaviors, {
+Element.defineBehaviors({
 
 	pulse: function(options){
-		var periodical, 
+		var periodical,
 			tween = new Fx.Tween(this, {
 				property: options.property,
 				link: 'chain',
 				duration: options.duration / 2
 			});
-			
+
 		function pulse(){ tween.start(options.from).start(options.to) }
 		function start(){ pulse(); periodical = pulse.periodical(options.duration) }
 		function stop(){ tween.cancel(); clearInterval(periodical) }
@@ -46,14 +46,14 @@ Object.append(Element.behaviors, {
 
 });
 
-Element.behaviors.filterNow();
+Element.filterBehaviors();
 
 // specs
 var fixture = $('fixture');
 
 var color = fixture.getStyle('background-color');
 console.assert(
-	color == '#cccccc', 
+	color == '#cccccc',
 	'Filters should be applied to elements',
 	'Expected #cccccc, got: ' + color
 );

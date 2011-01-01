@@ -1,13 +1,14 @@
-Object.append(Element.behaviors, {
+
+Element.defineBehaviors({
 
 	pulse: function(options){
-		var periodical, 
+		var periodical,
 			tween = new Fx.Tween(this, {
 				property: options.property,
 				link: 'chain',
 				duration: options.duration / 2
 			});
-			
+
 		function pulse(){ tween.start(options.from).start(options.to) }
 		function start(){ pulse(); periodical = pulse.periodical(options.duration) }
 		function stop(){ tween.cancel(); clearInterval(periodical) }
@@ -22,5 +23,4 @@ Object.append(Element.behaviors, {
 
 });
 
-
-window.addEvent('domready', Element.behaviors.filterNow);
+window.addEvent('domready', Element.filterBehaviors);
