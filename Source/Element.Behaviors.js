@@ -17,6 +17,7 @@ provides: [Element.Behaviors]
 
 ...
 */
+
 Element.behaviors = {};
 Element.behaviors.filterNow = function(){
 	$$('[data-filter]').each(function(element){
@@ -26,7 +27,7 @@ Element.behaviors.filterNow = function(){
 			    options = JSON.decode((element.get('data-' + (split[1] || filter))) || '{}');
 			if (raw == '' || element.retrieve('behavior-' + raw)) return;
 			if (!Element.behaviors[filter]) throw new Error('Filter `' + filter + '` is undefined');
-			element.store('behavior-' + raw, Element.behaviors[filter].apply(element, [options]) || true);
+			element.store('behavior-' + raw, Element.behaviors[filter].call(element, options) || true);
 		});
 	});
 };
